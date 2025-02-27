@@ -12,8 +12,6 @@ defmodule RustDetector do
   end
 end
 
-# "Mozilla/5.0 (iPad; CPU OS 7_0_4 like Mac OS X) AppleWebKit/237.100.1 (KHTML, like Gecko) Version/7.0 Mobile/11B554a Safari/9537.53"
-
 Benchee.run(
   %{
     "elixir" => fn inputs -> Enum.each(inputs, &UAInspector.parse/1) end,
