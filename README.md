@@ -30,10 +30,10 @@ Formatting results...
 
 ##### With input 1k random from devices.txt #####
 Name                ips        average  deviation         median         99th %
-elixir             5.38        0.186 s     ±6.78%        0.184 s         0.25 s
-rust port         0.172         5.81 s     ±0.00%         5.81 s         5.81 s
+rust port         0.171         5.85 s     ±0.00%         5.85 s         5.85 s
+elixir           0.0295        33.95 s     ±0.00%        33.95 s        33.95 s
 
 Comparison:
-elixir             5.38
-rust port         0.172 - 31.22x slower +5.62 s
+rust port         0.171
+elixir           0.0295 - 5.81x slower +28.10 s
 ```

@@ -46,6 +46,6 @@ Benchee.run(
        end}
   },
   inputs: %{
-    "1k random from devices.txt" => Enum.take(File.stream!("bench/devices.txt"), 1000)
+    "1k random from devices.txt" => Enum.take_random(File.stream!("bench/devices.txt"), 1000)
   }
 )
