@@ -12,6 +12,8 @@ defmodule RustDetector do
   end
 end
 
+devices = Enum.to_list(File.stream!("bench/devices.txt"))
+
 Benchee.run(
   %{
     "elixir" => fn inputs -> Enum.each(inputs, &UAInspector.parse/1) end,
@@ -46,6 +48,9 @@ Benchee.run(
        end}
   },
   inputs: %{
-    "1k random from devices.txt" => Enum.take_random(File.stream!("bench/devices.txt"), 1000)
-  }
+    "10 random from devices.txt" => Enum.take_random(devices, 10),
+    "100 random from devices.txt" => Enum.take_random(devices, 100),
+    "all devices.txt" => devices
+  },
+  parallel: 4
 )
