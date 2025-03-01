@@ -2,7 +2,7 @@ devices = Enum.to_list(File.stream!("bench/devices.txt"))
 
 Benchee.run(
   %{
-    # "elixir" => fn inputs -> Enum.each(inputs, &UAInspector.parse/1) end,
+    "elixir" => fn inputs -> Enum.each(inputs, &UAInspector.parse/1) end,
     "rust port" =>
       {fn %{inputs: inputs, port: port} ->
          Enum.each(inputs, fn ua -> RustDetector.parse(port, ua) end)
