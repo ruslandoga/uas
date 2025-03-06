@@ -17,5 +17,5 @@ Benchee.run(
     "100 random from devices.txt" => Enum.take_random(devices, 100),
     "all devices.txt" => Enum.shuffle(devices)
   },
-  parallel: 4
+  parallel: System.schedulers()
 )
