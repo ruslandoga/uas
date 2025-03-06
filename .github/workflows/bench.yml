@@ -1,0 +1,58 @@
+name: bench
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  benchee:
+    runs-on: ubuntu-latest
+
+    env:
+      MIX_ENV: bench
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: simplecastapps/rust-device-detector
+          path: rust-device-detector
+
+      - id: beam
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: 1
+          otp-version: 27
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            deps
+            _build
+          key: bench-${{ steps.beam.outputs.elixir-version }}-${{ github.head_ref || github.ref }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            bench-${{ steps.beam.outputs.elixir-version }}-${{ github.head_ref || github.ref }}-
+            bench-${{ steps.beam.outputs.elixir-version }}-refs/heads/master-
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            rust-device-detector/target
+            ~/.cargo
+          key: rust-${{ github.head_ref || github.ref }}-${{ hashFiles('rust-device-detector/Cargo.lock') }}
+          restore-keys: |
+            rust-${{ github.head_ref || github.ref }}-
+            rust-refs/heads/master-
+
+      - run: cargo build --release --features=build-binary
+        working-directory: rust-device-detector
+
+      - run: mix deps.get --only $MIX_ENV
+      - run: mix compile --warnings-as-errors
+      - run: mix ua_inspector.download --force
+      - run: mix run bench/ua.exs
+        env:
+          RUST_DETECTOR_PATH: ./rust-device-detector/target/release/rust-device-detector
